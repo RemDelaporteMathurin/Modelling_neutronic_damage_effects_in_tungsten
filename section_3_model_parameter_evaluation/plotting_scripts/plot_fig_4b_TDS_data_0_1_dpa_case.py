@@ -10,7 +10,9 @@ resting_time = 0.5 * 24 * 3600
 area = 12e-03 * 15e-03
 
 # reference TDS
-data_0_1 = np.genfromtxt("tds_data/0.1_dpa.csv", delimiter=",")
+data_0_1 = np.genfromtxt(
+    "../data/tds_data_schwartz_selinger/0.1_dpa.csv", delimiter=","
+)
 T_0_1 = data_0_1[:, 0]
 flux_0_1 = data_0_1[:, 1] / area
 
@@ -26,7 +28,7 @@ trap_D2 = []
 trap_D3 = []
 trap_D4 = []
 
-with open("../Results/damaged_sample_tds_fittings/dpa_0.1/last.csv", "r") as csvfile:
+with open("../data/damaged_sample_tds_fittings/dpa_0.1/last.csv", "r") as csvfile:
     plots = csv.reader(csvfile, delimiter=",")
     for row in plots:
         if "t(s)" not in row:
