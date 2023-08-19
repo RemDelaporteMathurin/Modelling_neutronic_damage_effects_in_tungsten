@@ -5,10 +5,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
-
 T_range = np.linspace(400, 1300, num=50)
 dpa_values = np.geomspace(1e-05, 1e03, num=10)
-results_folder = "../results/inventories_1fpy/"
+results_folder = "../data/inventories_1fpy/"
 
 # standard case
 standard_file = results_folder + "dpa=0/T=700/derived_quantities.csv"
@@ -56,7 +55,7 @@ norm = LogNorm(vmin=min(dpa_values), vmax=max(dpa_values))
 sm = plt.cm.ScalarMappable(cmap=cm.viridis, norm=norm)
 colours = [colorbar(norm(dpa)) for dpa in dpa_values]
 
-results_folder = "../results/inventories_1fpy/profiles/"
+results_folder = "../data/inventories_1fpy/profiles/"
 data_file = results_folder + "case_dpa=1e-01.csv"
 x_data = np.genfromtxt(data_file, delimiter=",", names=True)
 x_values = x_data["arc_length"]
