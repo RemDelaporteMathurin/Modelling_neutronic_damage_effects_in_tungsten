@@ -1,10 +1,5 @@
 from matplotlib import pyplot as plt
 import numpy as np
-from scipy.integrate import odeint
-
-from neutron_trap_creation_models import (
-    neutron_trap_creation_numerical,
-)
 
 """
 orginal data from A.Zaloznik et al, available at https://doi.org/10.1088/0031-8949/t167/1/014031
@@ -12,58 +7,22 @@ subsequently fitted by E.Hodille et al, available at https://doi.org/10.1088/174
 """
 
 test_temperatures = [298, 600, 800, 1000, 1200]
-trap_3_densities =  [0.09, 0.08, 0.06, 0.00, 0.00]
-trap_4_densities = [0.28, 0.23, 0.19, 0.15, 0.05]
+trap_3_densities = [0.09, 0.08, 0.06, 0.00, 0.00]  # at.fr
+trap_4_densities = [0.28, 0.23, 0.19, 0.15, 0.05]  # at.fr
 annealing_time = 3600
 
-# ##### standard variables ##### #
-atom_density_W = 6.3e28
-t_values = np.linspace(0, annealing_time, num=1000)
-T_values = np.linspace(1, 1400, num=1000)
-A_0_optimised = 6.1838e-03
-E_A_optimised = 0.2792
-
-# dummy values for damage parameters
-phi = 0
-K = 1
-n_max = 1
-
-# ##### post-processing ##### #
-
-def evaluate_annealed_trap_density_fitting():
-    """ Runs a numerical model to evaluate how the trap
-    densities vary over the annealing time and takes the final
-    value
-    """
-
-    n_0_trap_3 = trap_3_densities[0] * atom_density_W * 1e-02
-    n_0_trap_4 = trap_4_densities[0] * atom_density_W * 1e-02
-
-    annealed_trap_3_densities = []
-    annealed_trap_4_densities = []
-
-    for T in T_values:
-        extra_args = (phi, K, n_max, A_0_optimised, E_A_optimised, T)
-        # trap 3
-        n_traps_annleaing_trap_3 = odeint(
-            neutron_trap_creation_numerical, n_0_trap_3, t_values, args=extra_args
-        )
-        end_value_trap_3 = float(n_traps_annleaing_trap_3[-1])
-        annealed_trap_3_densities.append(end_value_trap_3)
-
-        # trap 4
-        n_traps_annleaing_trap_4 = odeint(
-            neutron_trap_creation_numerical, n_0_trap_4, t_values, args=extra_args
-        )
-        end_value_trap_4 = float(n_traps_annleaing_trap_4[-1])
-        annealed_trap_4_densities.append(end_value_trap_4)
-
-    return annealed_trap_3_densities, annealed_trap_4_densities
-
-
-annealed_trap_3_densities, annealed_trap_4_densities = evaluate_annealed_trap_density_fitting()
+# convert trap densities to m-3
 trap_3_densities = (np.array(trap_3_densities) / 100) * 6.3e28
 trap_4_densities = (np.array(trap_4_densities) / 100) * 6.3e28
+
+# read fitting data
+annealed_trap_3_densities = np.genfromtxt("../data/annealed_trap_3_densities.txt")
+annealed_trap_4_densities = np.genfromtxt("../data/annealed_trap_4_densities.txt")
+
+print(annealed_trap_3_densities[-1])
+print(annealed_trap_4_densities[-1])
+
+T_values = np.linspace(1, 1400, num=1000)
 
 # ##### Plotting ##### #
 
