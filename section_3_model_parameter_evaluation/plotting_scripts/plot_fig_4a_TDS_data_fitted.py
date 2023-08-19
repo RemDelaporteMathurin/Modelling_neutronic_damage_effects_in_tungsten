@@ -14,18 +14,19 @@ dpa_values = [2.5, 0.5, 0.23, 0.1, 0.023, 0.005, 0.001, 0]
 
 # ##### get tds and fitting data #### #
 
+
 def retrieve_tds_and_fitting_data():
     tds_T_and_flux = []
     fitting_data = []
 
     for dpa in dpa_values:
-        tds_data_file = "tds_data/{}_dpa.csv".format(dpa)
+        tds_data_file = "../data/tds_data_schwartz_selinger/{}_dpa.csv".format(dpa)
         tds_data = np.genfromtxt(tds_data_file, delimiter=",", dtype=float)
         tds_data_T = tds_data[:, 0]
         tds_data_flux = tds_data[:, 1] / sample_area
         tds_T_and_flux.append([tds_data_T, tds_data_flux])
 
-        results_folder = "../Results/damaged_sample_tds_fittings/"
+        results_folder = "../data/damaged_sample_tds_fittings/"
         fitting_file = results_folder + "dpa_{}/last.csv".format(dpa)
         T_sim = []
         flux_1 = []
