@@ -19,9 +19,6 @@ trap_4_densities = (np.array(trap_4_densities) / 100) * 6.3e28
 annealed_trap_3_densities = np.genfromtxt("../data/annealed_trap_3_densities.txt")
 annealed_trap_4_densities = np.genfromtxt("../data/annealed_trap_4_densities.txt")
 
-print(annealed_trap_3_densities[-1])
-print(annealed_trap_4_densities[-1])
-
 T_values = np.linspace(1, 1400, num=1000)
 
 # ##### Plotting ##### #
