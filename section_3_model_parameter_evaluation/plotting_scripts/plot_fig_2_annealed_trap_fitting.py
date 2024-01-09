@@ -6,20 +6,23 @@ orginal data from A.Zaloznik et al, available at https://doi.org/10.1088/0031-89
 subsequently fitted by E.Hodille et al, available at https://doi.org/10.1088/1741-4326/aa5aa5
 """
 
-test_temperatures = [298, 600, 800, 1000, 1200]
-trap_3_densities = [0.09, 0.08, 0.06, 0.00, 0.00]  # at.fr
-trap_4_densities = [0.28, 0.23, 0.19, 0.15, 0.05]  # at.fr
-annealing_time = 3600
+test_temperatures = [370, 400, 500, 600, 800]
+defect_type_1_densities = [0.230, 0.230, 0.225, 0.153, 0.107] # at.fr
+defect_type_2_densities = [0.290, 0.290, 0.280, 0.280, 0.189]  # at.fr
+defect_type_3_densities = [0.05, 0.05, 0.05, 0.05, 0.06]  # at.fr
+annealing_time = 7200
 
-# convert trap densities to m-3
-trap_3_densities = (np.array(trap_3_densities) / 100) * 6.3e28
-trap_4_densities = (np.array(trap_4_densities) / 100) * 6.3e28
+# # convert trap densities to m-3
+# defect_type_1_densities = (np.array(defect_type_1_densities) / 100) * 6.3e28
+# defect_type_2_densities = (np.array(defect_type_2_densities) / 100) * 6.3e28
+# defect_type_3_densities = (np.array(defect_type_3_densities) / 100) * 6.3e28
 
 # read fitting data
-annealed_trap_3_densities = np.genfromtxt("../data/annealed_trap_3_densities.txt")
-annealed_trap_4_densities = np.genfromtxt("../data/annealed_trap_4_densities.txt")
+annealed_defect_type_1_densities = np.genfromtxt("../data/annealed_defect_1_densities.txt")
+annealed_defect_type_2_densities = np.genfromtxt("../data/annealed_defect_2_densities.txt")
+annealed_defect_type_3_densities = np.genfromtxt("../data/annealed_defect_3_densities.txt")
 
-T_values = np.linspace(1, 1400, num=1000)
+T_values = np.linspace(1, 900, num=1000)
 
 # ##### Plotting ##### #
 
@@ -28,53 +31,60 @@ plt.rc("font", family="serif", size=12)
 
 green_ryb = (117 / 255, 184 / 255, 42 / 255)
 firebrick = (181 / 255, 24 / 255, 32 / 255)
+electric_blue = (83 / 255, 244 / 255, 255 / 255)
 
-fig, axs = plt.subplots(2, 1, sharex=True, figsize=(5, 7.5))
+plt.figure()
 
-# trap 3
-plt.sca(axs[0])
-# ref values
+# defect type I
 plt.scatter(
     test_temperatures,
-    trap_3_densities,
+    defect_type_1_densities,
     marker="x",
     color=green_ryb,
 )
-# fitting
 plt.plot(
     T_values,
-    annealed_trap_3_densities,
+    annealed_defect_type_1_densities,
     color=green_ryb,
-    label=r"Trap 3",
+    label=r"Defect type I",
 )
 
-# trap 4
-plt.sca(axs[1])
-# ref values
+# defect type II
 plt.scatter(
     test_temperatures,
-    trap_4_densities,
+    defect_type_2_densities,
     marker="x",
     color=firebrick,
 )
-# fitting
 plt.plot(
     T_values,
-    annealed_trap_4_densities,
+    annealed_defect_type_2_densities,
     color=firebrick,
-    label=r"Trap 4",
+    label=r"Defect type II",
 )
 
-for ax in [axs[0], axs[1]]:
-    plt.sca(ax)
-    plt.ylim(bottom=0)
-    plt.xlim(0, 1400)
-    plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
-    plt.legend(loc="lower left")
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
+# defect type III
+plt.scatter(
+    test_temperatures,
+    defect_type_3_densities,
+    marker="x",
+    color=electric_blue,
+)
+plt.plot(
+    T_values,
+    annealed_defect_type_3_densities,
+    color=electric_blue,
+    label=r"Defect type III",
+)
+
+plt.ylim(bottom=0)
+plt.xlim(300, 900)
+plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
+plt.legend()
+ax = plt.gca()
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
 plt.xlabel(r"Annealing temperature (K)")
-plt.subplots_adjust(wspace=0.112, hspace=0.2)
 plt.tight_layout()
 
 plt.show()
