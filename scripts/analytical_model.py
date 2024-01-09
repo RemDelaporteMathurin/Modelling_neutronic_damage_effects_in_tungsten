@@ -1,4 +1,5 @@
 import numpy as np
+
 # import h_transport_materials as htm
 import matplotlib.pyplot as plt
 
@@ -327,7 +328,7 @@ def inventory_variation_with_damage_and_temperature(
                 H_retention_no_damage,
                 trap_densities_no_damage,
                 trap_filling_ratios_no_damage,
-            ) = analytical_model(phi=phi, T=T)
+            ) = analytical_model(phi=0, T=T)
             inventory_per_dpa.append(H_retention)
             inventories_no_damage.append(H_retention_no_damage)
         inventories.append(inventory_per_dpa)

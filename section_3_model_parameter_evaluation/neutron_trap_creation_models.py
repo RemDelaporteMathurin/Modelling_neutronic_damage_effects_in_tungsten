@@ -26,3 +26,22 @@ def neutron_trap_creation_numerical(
     """
     dndt = phi * K * (1 - (n / n_max)) - A_0 * np.exp(-E_A / (k_B * T)) * n
     return dndt
+
+
+def annealing_sim(A_0, E_A, n_0, T, t):
+    """
+    Runs a numerical model of annealing effects on traps induced by neutron
+    damage
+
+    Args:
+        A_0 (float): trap annealing factor (s-1).
+        E_A (float): Annealing activation energy (eV).
+
+    Returns:
+        (list): A list of trap densities at various annealing tempertures
+    """
+    k_B = 8.617333e-05
+    A = A_0 * np.exp((-E_A) / (k_B * T))
+    annealed_trap_densities = n_0 * np.exp(-A * t)
+
+    return annealed_trap_densities

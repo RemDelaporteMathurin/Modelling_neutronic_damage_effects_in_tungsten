@@ -9,15 +9,22 @@ TDS data from T.Swartz-Selinger, currently unpublished
 dpa_values = [0, 0.001, 0.005, 0.023, 0.1, 0.23, 0.5, 2.5]
 
 # trap density variations, fitted from TDS data
-trap_D1_densities = [0, 3.5e24, 5.3e24, 2.0e25, 4.2e25, 4.5e25, 4.7e25, 5.3e25]
-trap_D2_densities = [0, 5.0e23, 1.9e24, 9.5e24, 2.6e25, 3.4e25, 3.6e25, 4.5e25]
-trap_D3_densities = [0, 5.0e23, 1.0e24, 6.0e24, 2.0e25, 2.7e25, 3.2e25, 3.9e25]
-trap_D4_densities = [0, 1.0e24, 2.0e24, 1.7e25, 3.2e25, 3.4e25, 3.8e25, 4.2e25]
+trap_D1_densities = [0, 4.5e24, 7.0e24, 2.4e25, 5.4e25, 5.8e25, 6.0e25, 6.8e25]
+trap_D2_densities = [0, 1.0e24, 2.5e24, 1.4e24, 3.8e25, 4.4e25, 4.8e25, 6.1e25]
+trap_D3_densities = [0, 5.0e23, 1.0e24, 6.0e24, 2.8e25, 3.5e25, 4.3e25, 5.0e25]
+trap_D4_densities = [0, 1.0e24, 1.9e24, 2.1e25, 3.6e25, 4.0e25, 4.3e25, 5.0e25]
+trap_D5_densities = [0, 2.0e23, 1.6e24, 6.0e24, 1.1e25, 1.4e25, 1.8e25, 2.0e25]
 
 dpa_x_values = np.linspace(0, 3, num=100)
 t_damage = 86400
-A_0_optimised = 6.1838e-03
-E_A_optimised = 0.2792
+A_0_1 = 6.1838e-03
+E_A_1 = 0.26
+E_A_2 = 0.34
+
+# dummy values for no annealing
+A_0_2 = 0
+E_A_3 = 1
+
 T = 800  # K
 
 
