@@ -59,11 +59,53 @@ def obtain_analytical_trap_density_variation(dpa_values, T_damage, t_damage, A_0
         )
         trap_D4_density_variation.append(trap_D4_density)
 
+    total_trap_density_295 = []
+    total_trap_density_800 = []
+
+    for dpa in dpa_values:
+        fpy = 3600 * 24 * 265.25
+        phi = dpa / fpy
+        trap_D1_density = neutron_trap_creation_analytical_steady(
+            T=295, phi=phi, K=trap_D1_K, n_max=trap_D1_n_max, A_0=A_0, E_A=E_A
+        )
+        trap_D2_density = neutron_trap_creation_analytical_steady(
+            T=295, phi=phi, K=trap_D2_K, n_max=trap_D2_n_max, A_0=A_0, E_A=E_A
+        )
+        trap_D3_density = neutron_trap_creation_analytical_steady(
+            T=295, phi=phi, K=trap_D3_K, n_max=trap_D3_n_max, A_0=A_0, E_A=E_A
+        )
+        trap_D4_density = neutron_trap_creation_analytical_steady(
+            T=295, phi=phi, K=trap_D4_K, n_max=trap_D4_n_max, A_0=A_0, E_A=E_A
+        )
+        total_trap_density = (
+            trap_D1_density + trap_D2_density + trap_D3_density + trap_D4_density
+        )
+        total_trap_density_295.append(total_trap_density)
+
+        trap_D1_density = neutron_trap_creation_analytical_steady(
+            T=800, phi=phi, K=trap_D1_K, n_max=trap_D1_n_max, A_0=A_0, E_A=E_A
+        )
+        trap_D2_density = neutron_trap_creation_analytical_steady(
+            T=800, phi=phi, K=trap_D2_K, n_max=trap_D2_n_max, A_0=A_0, E_A=E_A
+        )
+        trap_D3_density = neutron_trap_creation_analytical_steady(
+            T=800, phi=phi, K=trap_D3_K, n_max=trap_D3_n_max, A_0=A_0, E_A=E_A
+        )
+        trap_D4_density = neutron_trap_creation_analytical_steady(
+            T=800, phi=phi, K=trap_D4_K, n_max=trap_D4_n_max, A_0=A_0, E_A=E_A
+        )
+        total_trap_density = (
+            trap_D1_density + trap_D2_density + trap_D3_density + trap_D4_density
+        )
+        total_trap_density_800.append(total_trap_density)
+
     return (
         trap_D1_density_variation,
         trap_D2_density_variation,
         trap_D3_density_variation,
         trap_D4_density_variation,
+        total_trap_density_295,
+        total_trap_density_800,
     )
 
 
@@ -72,6 +114,8 @@ def obtain_analytical_trap_density_variation(dpa_values, T_damage, t_damage, A_0
     trap_D2_density_variation,
     trap_D3_density_variation,
     trap_D4_density_variation,
+    total_trap_density_295,
+    total_trap_density_800,
 ) = obtain_analytical_trap_density_variation(
     dpa_values=dpa_values,
     T_damage=700,
@@ -96,4 +140,12 @@ np.savetxt(
 np.savetxt(
     "data/damage_trap_D4_density_variation.txt",
     trap_D4_density_variation,
+)
+np.savetxt(
+    "data/total_trap_density_295.txt",
+    total_trap_density_295,
+)
+np.savetxt(
+    "data/total_trap_density_800.txt",
+    total_trap_density_800,
 )

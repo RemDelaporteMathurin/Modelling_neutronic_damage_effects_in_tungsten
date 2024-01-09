@@ -14,6 +14,8 @@ trap_D3_density_variation = np.genfromtxt(
 trap_D4_density_variation = np.genfromtxt(
     "../data/damage_trap_D4_density_variation.txt"
 )
+total_trap_density_295 = np.genfromtxt("../data/total_trap_density_295.txt")
+total_trap_density_800 = np.genfromtxt("../data/total_trap_density_800.txt")
 dpa_values = np.geomspace(1e-3, 1e03, num=1000)
 
 # ##### plotting ##### #
@@ -25,41 +27,74 @@ firebrick = (181 / 255, 24 / 255, 32 / 255)
 pewter_blue = (113 / 255, 162 / 255, 182 / 255)
 electric_blue = (83 / 255, 244 / 255, 255 / 255)
 
-plt.figure()
-plt.plot(
-    dpa_values,
-    trap_D1_density_variation,
-    label=r"Trap D1",
-    color=firebrick,
-)
-plt.plot(
-    dpa_values,
-    trap_D2_density_variation,
-    label=r"Trap D2",
-    color=pewter_blue,
-)
-plt.plot(
-    dpa_values,
-    trap_D3_density_variation,
-    label=r"Trap D3",
-    color=electric_blue,
-)
-plt.plot(
-    dpa_values,
-    trap_D4_density_variation,
-    label=r"Trap D4",
-    color=green_ryb,
-)
-plt.xlabel(r"Damage rate (dpa/fpy)")
-plt.ylabel(r"Trap density (m$^{-3}$)")
-plt.xlim(dpa_values[0], dpa_values[-1])
-plt.ylim(1e23, 1e26)
-plt.yscale("log")
-plt.xscale("log")
-plt.legend()
-plt.tight_layout()
-ax = plt.gca()
-ax.spines["top"].set_visible(False)
-ax.spines["right"].set_visible(False)
 
+def plot_normal():
+    plt.figure()
+    plt.plot(
+        dpa_values,
+        trap_D1_density_variation,
+        label=r"Trap D1",
+        color=firebrick,
+    )
+    plt.plot(
+        dpa_values,
+        trap_D2_density_variation,
+        label=r"Trap D2",
+        color=pewter_blue,
+    )
+    plt.plot(
+        dpa_values,
+        trap_D3_density_variation,
+        label=r"Trap D3",
+        color=electric_blue,
+    )
+    plt.plot(
+        dpa_values,
+        trap_D4_density_variation,
+        label=r"Trap D4",
+        color=green_ryb,
+    )
+    plt.xlabel(r"Damage rate (dpa/fpy)")
+    plt.ylabel(r"Trap density (m$^{-3}$)")
+    plt.xlim(dpa_values[0], dpa_values[-1])
+    plt.ylim(1e23, 1e26)
+    plt.yscale("log")
+    plt.xscale("log")
+    plt.legend()
+    plt.tight_layout()
+    ax = plt.gca()
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+
+
+def plot_alt():
+    plt.figure()
+    plt.plot(
+        dpa_values,
+        total_trap_density_295,
+        label=r"295K",
+        color=firebrick,
+    )
+    plt.plot(
+        dpa_values,
+        total_trap_density_800,
+        label=r"800K",
+        color=pewter_blue,
+    )
+
+    plt.xlabel(r"Damage rate (dpa/fpy)")
+    plt.ylabel(r"Trap density (m$^{-3}$)")
+    # plt.xlim(dpa_values[0], dpa_values[-1])
+    # plt.ylim(1e23, 1e26)
+    plt.yscale("log")
+    plt.xscale("log")
+    plt.legend()
+    plt.tight_layout()
+    ax = plt.gca()
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+
+
+plot_normal()
+plot_alt()
 plt.show()
