@@ -183,7 +183,7 @@ def festim_sim(
     # define settings
     my_model.dt = F.Stepsize(
         1,
-        stepsize_change_ratio=1.02,
+        stepsize_change_ratio=1.1,
         t_stop=implantation_time + resting_time * 0.5,
         dt_min=1e-1,
         stepsize_stop_max=50,
