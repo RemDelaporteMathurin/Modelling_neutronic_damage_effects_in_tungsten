@@ -3,7 +3,6 @@ import numpy as np
 
 """
 orginal data from A.Zaloznik et al, available at https://doi.org/10.1088/0031-8949/t167/1/014031
-subsequently fitted by E.Hodille et al, available at https://doi.org/10.1088/1741-4326/aa5aa5
 """
 
 test_temperatures = [370, 400, 500, 600, 800]
@@ -11,11 +10,6 @@ defect_type_1_densities = [0.230, 0.230, 0.225, 0.153, 0.107] # at.fr
 defect_type_2_densities = [0.290, 0.290, 0.280, 0.280, 0.189]  # at.fr
 defect_type_3_densities = [0.05, 0.05, 0.05, 0.05, 0.06]  # at.fr
 annealing_time = 7200
-
-# # convert trap densities to m-3
-# defect_type_1_densities = (np.array(defect_type_1_densities) / 100) * 6.3e28
-# defect_type_2_densities = (np.array(defect_type_2_densities) / 100) * 6.3e28
-# defect_type_3_densities = (np.array(defect_type_3_densities) / 100) * 6.3e28
 
 # read fitting data
 annealed_defect_type_1_densities = np.genfromtxt("../data/annealed_defect_1_densities.txt")
@@ -78,7 +72,7 @@ plt.plot(
 )
 
 plt.ylim(bottom=0)
-plt.xlim(300, 900)
+plt.xlim(350, 850)
 plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
 plt.legend()
 ax = plt.gca()

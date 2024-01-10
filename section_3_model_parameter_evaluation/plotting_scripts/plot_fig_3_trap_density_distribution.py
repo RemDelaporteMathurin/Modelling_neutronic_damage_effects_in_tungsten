@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-x_0 = 2.5e-06
-dx_0 = 5.0e-07
+x_0 = 2.3e-06
+dx_0 = 1.0e-07
 x_values = np.linspace(0, 1e-5, num=1000)
 
 # distrubution
@@ -16,7 +16,7 @@ plt.rc("font", family="serif", size=12)
 plt.figure()
 plt.plot(x_values, traps, color="black")
 plt.xlim(0, 1e-05)
-plt.ylim(0, 1)
+plt.ylim(0, 1.01)
 plt.ylabel("Trap density ratio")
 plt.xlabel("x (m)")
 ax = plt.gca()

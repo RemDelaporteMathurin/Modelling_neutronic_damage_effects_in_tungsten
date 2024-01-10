@@ -19,8 +19,8 @@ t_annealing = np.linspace(0, annealing_time, num=1000)
 T_values = np.linspace(1, 800, num=1000)
 
 A_0_1 = 6.1834e-03
-E_A_1 = 0.25
-E_A_2 = 0.33
+E_A_1 = 0.24
+E_A_2 = 0.30
 
 # dummy values for no annealing
 A_0_2 = 0

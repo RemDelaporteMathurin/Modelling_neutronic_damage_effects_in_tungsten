@@ -27,6 +27,7 @@ trap_D1 = []
 trap_D2 = []
 trap_D3 = []
 trap_D4 = []
+trap_D5 = []
 
 with open("../data/damaged_sample_tds_fittings/dpa_0.1/last.csv", "r") as csvfile:
     plots = csv.reader(csvfile, delimiter=",")
@@ -44,12 +45,14 @@ with open("../data/damaged_sample_tds_fittings/dpa_0.1/last.csv", "r") as csvfil
                 trap_D2.append(float(row[8]))
                 trap_D3.append(float(row[9]))
                 trap_D4.append(float(row[10]))
+                trap_D5.append(float(row[11]))
 
 trap_1_contribution = (np.diff(trap_1) / np.diff(t)) * -1
 trap_D1_contribution = (np.diff(trap_D1) / np.diff(t)) * -1
 trap_D2_contribution = (np.diff(trap_D2) / np.diff(t)) * -1
 trap_D3_contribution = (np.diff(trap_D3) / np.diff(t)) * -1
 trap_D4_contribution = (np.diff(trap_D4) / np.diff(t)) * -1
+trap_D5_contribution = (np.diff(trap_D5) / np.diff(t)) * -1
 solute_contribution = (np.diff(solute) / np.diff(t)) * -1
 
 
@@ -77,7 +80,7 @@ plt.plot(
     T_sim[1:],
     trap_1_contribution,
     linestyle="dashed",
-    color="black",
+    color="grey",
     label=r"Trap 1",
 )
 plt.plot(
@@ -108,11 +111,19 @@ plt.plot(
     color=green_ryb,
     label=r"Trap D4",
 )
+plt.plot(
+    T_sim[1:],
+    trap_D5_contribution,
+    linestyle="dashed",
+    color="black",
+    label=r"Trap D5",
+)
 plt.fill_between(T_sim[1:], 0, trap_1_contribution, color="grey", alpha=0.1)
 plt.fill_between(T_sim[1:], 0, trap_D1_contribution, color="grey", alpha=0.1)
 plt.fill_between(T_sim[1:], 0, trap_D2_contribution, color="grey", alpha=0.1)
 plt.fill_between(T_sim[1:], 0, trap_D3_contribution, color="grey", alpha=0.1)
 plt.fill_between(T_sim[1:], 0, trap_D4_contribution, color="grey", alpha=0.1)
+plt.fill_between(T_sim[1:], 0, trap_D5_contribution, color="grey", alpha=0.1)
 
 plt.xlim(300, 1000)
 plt.ylim(0, 1.0e17)

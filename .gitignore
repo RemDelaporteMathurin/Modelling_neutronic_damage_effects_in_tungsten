@@ -1,7 +1,2 @@
-*.pdf
-*.h5
-*.xdmf
 *.pyc
-*.png
-*.svg
-
+scripts/
