@@ -65,7 +65,7 @@ solute_contribution = (np.diff(solute) / np.diff(t)) * -1
 
 # ##### plotting ##### #
 
-# plt.rc("text", usetex=True)
+plt.rc("text", usetex=True)
 plt.rc("font", family="serif", size=12)
 
 green_ryb = (117 / 255, 184 / 255, 42 / 255)
