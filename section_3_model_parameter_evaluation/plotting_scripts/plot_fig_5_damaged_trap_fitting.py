@@ -89,7 +89,7 @@ plt.legend(loc="lower right")
 # highlight trap D5
 ax5 = fig.add_subplot(515)
 plt.sca(ax5)
-plt.scatter(dpa_values, trap_D5_densities, color=green_ryb, marker="x")
+plt.scatter(dpa_values, trap_D5_densities, color="black", marker="x")
 plt.plot(dpa_x_values, trap_D5_fitting, color="black", label=r"Trap D5")
 plt.plot(dpa_x_values, trap_D1_fitting, color="grey", alpha=0.2)
 plt.plot(dpa_x_values, trap_D2_fitting, color="grey", alpha=0.2)
@@ -100,7 +100,6 @@ plt.xlabel(r"Damage (dpa)")
 
 for ax in [ax1, ax2, ax3, ax4, ax5]:
     plt.sca(ax)
-    ax.get_shared_x_axes().join(ax, ax5)
     plt.ylim(0, 8e25)
     plt.xlim(left=0)
     ax.spines["top"].set_visible(False)
