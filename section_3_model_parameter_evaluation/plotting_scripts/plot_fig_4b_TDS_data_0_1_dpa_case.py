@@ -29,23 +29,30 @@ trap_D3 = []
 trap_D4 = []
 trap_D5 = []
 
-with open("../data/damaged_sample_tds_fittings/dpa_0.1/last.csv", "r") as csvfile:
-    plots = csv.reader(csvfile, delimiter=",")
-    for row in plots:
-        if "t(s)" not in row:
-            if float(row[0]) >= implantation_time + resting_time * 0.75:
-                t.append(float(row[0]))
-                T_sim.append(float(row[1]))
-                flux1.append(float(row[2]))
-                flux2.append(float(row[3]))
-                solute.append(float(row[4]))
-                retention.append(float(row[5]))
-                trap_1.append(float(row[6]))
-                trap_D1.append(float(row[7]))
-                trap_D2.append(float(row[8]))
-                trap_D3.append(float(row[9]))
-                trap_D4.append(float(row[10]))
-                trap_D5.append(float(row[11]))
+data = np.genfromtxt(
+    "../data/damaged_sample_tds_fittings/dpa_0.1/last.csv",
+    delimiter=",",
+    names=True,
+)
+
+t = data["ts"]
+
+idx = np.where(
+    t >= implantation_time + resting_time * 0.75
+)  # only consider t > 0.75 * resting_time + implantation_time
+t = t[idx]
+T_sim = data["Average_T_volume_1"][idx]
+flux1 = data["Flux_surface_1_solute"][idx]
+flux2 = data["Flux_surface_2_solute"][idx]
+solute = data["Total_solute_volume_1"][idx]
+retention = data["Total_retention_volume_1"][idx]
+trap_1 = data["Total_1_volume_1"][idx]
+trap_D1 = data["Total_2_volume_1"][idx]
+trap_D2 = data["Total_3_volume_1"][idx]
+trap_D3 = data["Total_4_volume_1"][idx]
+trap_D4 = data["Total_5_volume_1"][idx]
+trap_D5 = data["Total_6_volume_1"][idx]
+
 
 trap_1_contribution = (np.diff(trap_1) / np.diff(t)) * -1
 trap_D1_contribution = (np.diff(trap_D1) / np.diff(t)) * -1
@@ -58,7 +65,7 @@ solute_contribution = (np.diff(solute) / np.diff(t)) * -1
 
 # ##### plotting ##### #
 
-plt.rc("text", usetex=True)
+# plt.rc("text", usetex=True)
 plt.rc("font", family="serif", size=12)
 
 green_ryb = (117 / 255, 184 / 255, 42 / 255)
