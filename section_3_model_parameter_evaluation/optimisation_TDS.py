@@ -2,7 +2,7 @@ from scipy.interpolate import interp1d
 from scipy.optimize import minimize
 import numpy as np
 
-from sim import festim_sim, implantation_time, resting_time, atom_density_W
+from TDS_sim import festim_sim, implantation_time, resting_time, atom_density_W
 
 
 def mean_absolute_error(y1, y2, x=None, bounds=None, weight=None):
@@ -59,7 +59,7 @@ def mean_absolute_error(y1, y2, x=None, bounds=None, weight=None):
     return err
 
 
-def error(p, norms=None, restart_data=None):
+def error(desorption_ref, T_ref, p, norms=None, restart_data=None):
     """
     Compute average absolute error between simulation and reference
     """
@@ -147,23 +147,10 @@ def error(p, norms=None, restart_data=None):
         # weight=[5, 5],
     )
 
-    # uncomment to compute MSE
-    # diff = normalised_desorption_ref - normalised_desorption_sim
-    # err = (diff**2).mean()
-
     # print error
     print("Error: {:.2e}".format(err))
     print("Absolute tolerance: {:.2e}".format(fatol))
     print("Absolute tolerance: {:.2e}".format(xatol))
-
-    # add parameters and error to csv file
-    # with open("simulations_results_scaled.csv", "a") as f:
-    #     writer = csv.writer(f, lineterminator="\n", delimiter=",")
-    #     writer.writerow([*p, err])
-
-    # with open("simulations_results.csv", "a") as f:
-    #     writer = csv.writer(f, lineterminator="\n", delimiter=",")
-    #     writer.writerow([*p_real, err])
 
     # RETURN ERROR
     return err
@@ -233,13 +220,12 @@ if __name__ == "__main__":
     n2_initial = 3.6e25
     n3_initial = 2.8e25
     n4_initial = 4e25
-    initial_guess = np.array([n1_initial, n2_initial, n3_initial, n4_initial])
+    n5_initial = 1e25
+    initial_guess = np.array([n1_initial, n2_initial, n3_initial, n4_initial, n5_initial])
 
     norms = ["linear", "linear", "linear", "linear"]
 
-    reference_data = np.genfromtxt(
-        "data/tds_data_schwartz_selinger/0.5_dpa.csv", delimiter=","
-    )
+    reference_data = np.genfromtxt("tds_data/0.5_dpa.csv", delimiter=",")
 
     TDS_optimisation(
         initial_guess=initial_guess, norms=norms, reference_data=reference_data
