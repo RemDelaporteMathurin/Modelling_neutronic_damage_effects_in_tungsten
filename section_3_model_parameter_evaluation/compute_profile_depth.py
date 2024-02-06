@@ -30,7 +30,7 @@ def automatic_vertices(r_p, size, mat, traps, nb_cells, T, implantation_time, fl
     cmax = r_p * flux / D
     max_penetration_depth = r_p + r_d(cmax, implantation_time, D, ns, ks, ps)
     dx = 3e-6 / 300
-    tolerance = 1.2
+    tolerance = 0.8
 
     if max_penetration_depth * tolerance > size * 0.9:
         max_penetration_depth = size
@@ -65,7 +65,7 @@ def automatic_vertices(r_p, size, mat, traps, nb_cells, T, implantation_time, fl
         number_of_cells_required = int(
             round((max_penetration_depth * tolerance - 3 * r_p) / dx)
         )
-        number_of_cells_required = int(number_of_cells_required) * 2
+        number_of_cells_required = int(number_of_cells_required)
 
         vertices = np.concatenate(
             [
