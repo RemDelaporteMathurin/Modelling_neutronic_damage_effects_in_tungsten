@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 T_range = np.linspace(400, 1300, num=50)
 dpa_range = np.geomspace(1e-5, 1e03, num=10)
@@ -16,11 +15,35 @@ fpy = 3600 * 24 * 365.25
 
 # diffusion parameters
 D_0 = 4.1e-7
-E_D = 0.39
+E_D = 0.28
 
-# annealing parameters
-A_0 = 6.18e-03
-E_A = 0.28
+# damaged trap parameters
+# defect type I
+A_0_1 = 6.1838e-03
+E_A_1 = 0.24
+
+trap_D1_K = 1.9e28
+trap_D1_n_max = 6.8e25
+trap_D2_K = 8.0e27
+trap_D2_n_max = 6.2e25
+
+# defect type II
+A_0_2 = 6.1838e-03
+E_A_2 = 0.30
+
+trap_D3_K = 3.5e27
+trap_D3_n_max = 5.3e25
+trap_D4_K = 7.0e27
+trap_D4_n_max = 4.9e25
+
+# defect type III
+A_0_3 = 0
+# A_0_3 = A_0_2
+E_A_3 = 1
+# E_A_3 = E_A_2
+
+trap_D5_K = 1.2e26
+trap_D5_n_max = 2.0e25
 
 # general trap parameters
 k_0 = 5.22e-17
@@ -123,16 +146,19 @@ def retention(c_m, c_t, L):
 
 def analytical_model(phi=9 / fpy, T=700, L=0.002):
     trap_d1_density = neutron_trap_creation_analytical_steady(
-        T=T, phi=phi, K=1.5e28, n_max=5.2e25, A_0=A_0, E_A=E_A
+        T=T, phi=phi, K=trap_D1_K, n_max=trap_D1_n_max, A_0=A_0_1, E_A=E_A_1
     )
     trap_d2_density = neutron_trap_creation_analytical_steady(
-        T=T, phi=phi, K=4.0e27, n_max=4.5e25, A_0=A_0, E_A=E_A
+        T=T, phi=phi, K=trap_D2_K, n_max=trap_D2_n_max, A_0=A_0_1, E_A=E_A_1
     )
     trap_d3_density = neutron_trap_creation_analytical_steady(
-        T=T, phi=phi, K=3.0e27, n_max=4.0e25, A_0=A_0, E_A=E_A
+        T=T, phi=phi, K=trap_D3_K, n_max=trap_D3_n_max, A_0=A_0_2, E_A=E_A_2
     )
     trap_d4_density = neutron_trap_creation_analytical_steady(
-        T=T, phi=phi, K=9.0e27, n_max=4.2e25, A_0=A_0, E_A=E_A
+        T=T, phi=phi, K=trap_D4_K, n_max=trap_D4_n_max, A_0=A_0_2, E_A=E_A_2
+    )
+    trap_d5_density = neutron_trap_creation_analytical_steady(
+        T=T, phi=phi, K=trap_D5_K, n_max=trap_D5_n_max, A_0=A_0_3, E_A=E_A_3
     )
 
     c_m = mobile_H_concentration(T=T, imp_flux=imp_flux, r_p=r_p, D_0=D_0, E_D=E_D)
@@ -146,8 +172,8 @@ def analytical_model(phi=9 / fpy, T=700, L=0.002):
         E_k=E_D,
         p_0=p_0,
         E_p=1.15,
-        A_0=A_0,
-        E_A=E_A,
+        A_0=A_0_1,
+        E_A=E_A_1,
         n_i=trap_d1_density,
         T=T,
     )
@@ -157,8 +183,8 @@ def analytical_model(phi=9 / fpy, T=700, L=0.002):
         E_k=E_D,
         p_0=p_0,
         E_p=1.35,
-        A_0=A_0,
-        E_A=E_A,
+        A_0=A_0_1,
+        E_A=E_A_1,
         n_i=trap_d2_density,
         T=T,
     )
@@ -168,8 +194,8 @@ def analytical_model(phi=9 / fpy, T=700, L=0.002):
         E_k=E_D,
         p_0=p_0,
         E_p=1.65,
-        A_0=A_0,
-        E_A=E_A,
+        A_0=A_0_2,
+        E_A=E_A_2,
         n_i=trap_d3_density,
         T=T,
     )
@@ -179,9 +205,20 @@ def analytical_model(phi=9 / fpy, T=700, L=0.002):
         E_k=E_D,
         p_0=p_0,
         E_p=1.85,
-        A_0=A_0,
-        E_A=E_A,
+        A_0=A_0_2,
+        E_A=E_A_2,
         n_i=trap_d4_density,
+        T=T,
+    )
+    c_t_d5, filling_ratio_d5 = trapped_H_concentration(
+        c_m=c_m,
+        k_0=k_0,
+        E_k=E_D,
+        p_0=p_0,
+        E_p=2.05,
+        A_0=A_0_3,
+        E_A=E_A_3,
+        n_i=trap_d5_density,
         T=T,
     )
 
@@ -191,6 +228,7 @@ def analytical_model(phi=9 / fpy, T=700, L=0.002):
         trap_d2_density,
         trap_d3_density,
         trap_d4_density,
+        trap_d5_density,
     ]
 
     trap_filling_ratios = [
@@ -199,271 +237,18 @@ def analytical_model(phi=9 / fpy, T=700, L=0.002):
         filling_ratio_d2,
         filling_ratio_d3,
         filling_ratio_d4,
+        filling_ratio_d5,
     ]
 
-    total_trapped_H_concentration = c_t_1 + c_t_d1 + c_t_d2 + c_t_d3 + c_t_d4
+    total_trapped_H_concentration = c_t_1 + c_t_d1 + c_t_d2 + c_t_d3 + c_t_d4 + c_t_d5
 
     total_retention = retention(c_m=c_m, c_t=total_trapped_H_concentration, L=L)
 
     return (total_retention, trap_densities, trap_filling_ratios)
 
 
-def de_trapping_rate(E_p, T):
-    v_dt = p_0 * np.exp(-E_p / k_B / T)
+def numerical_trap_creation_model(n, t, phi, K, n_max, A_0, E_A, T):
 
-    return v_dt
+        dndt = phi * K * (1 - (n / n_max)) - A_0 * np.exp(-E_A / (k_B * T)) * n
 
-
-def annealing_rate(T):
-    A = A_0 * np.exp(-E_A / k_B / T)
-
-    return A
-
-
-# ##### analytical test results gathering ##### #
-
-
-def compare_annealing_and_detrapping(T_range):
-    trap_1_detrapping_rates = []
-    trap_d1_detrapping_rates = []
-    trap_d2_detrapping_rates = []
-    trap_d3_detrapping_rates = []
-    trap_d4_detrapping_rates = []
-    annealing_rates = []
-    for T in T_range:
-        trap_1_detrapping = de_trapping_rate(E_p=1.00, T=T)
-        trap_d1_detrapping = de_trapping_rate(E_p=1.15, T=T)
-        trap_d2_detrapping = de_trapping_rate(E_p=1.35, T=T)
-        trap_d3_detrapping = de_trapping_rate(E_p=1.65, T=T)
-        trap_d4_detrapping = de_trapping_rate(E_p=1.85, T=T)
-        annealing = annealing_rate(T=T)
-
-        trap_1_detrapping_rates.append(trap_1_detrapping)
-        trap_d1_detrapping_rates.append(trap_d1_detrapping)
-        trap_d2_detrapping_rates.append(trap_d2_detrapping)
-        trap_d3_detrapping_rates.append(trap_d3_detrapping)
-        trap_d4_detrapping_rates.append(trap_d4_detrapping)
-        annealing_rates.append(annealing)
-
-    return (
-        trap_1_detrapping_rates,
-        trap_d1_detrapping_rates,
-        trap_d2_detrapping_rates,
-        trap_d3_detrapping_rates,
-        trap_d4_detrapping_rates,
-        annealing_rates,
-    )
-
-
-def filling_ratio_evaluation(T_range):
-    filling_ratios = []
-    for T in T_range:
-        (H_retention, trap_densities, trap_filling_ratios) = analytical_model(
-            phi=10 / fpy, T=T
-        )
-        filling_ratios.append(trap_filling_ratios)
-
-    trap_1_filling_ratios = []
-    trap_d1_filling_ratios, trap_d2_filling_ratios = [], []
-    trap_d3_filling_ratios, trap_d4_filling_ratios = [], []
-    for ratios in filling_ratios:
-        trap_1_filling_ratios.append(ratios[0])
-        trap_d1_filling_ratios.append(ratios[1])
-        trap_d2_filling_ratios.append(ratios[2])
-        trap_d3_filling_ratios.append(ratios[3])
-        trap_d4_filling_ratios.append(ratios[4])
-
-    return (
-        trap_1_filling_ratios,
-        trap_d1_filling_ratios,
-        trap_d2_filling_ratios,
-        trap_d3_filling_ratios,
-        trap_d4_filling_ratios,
-    )
-
-
-def inventory_variation_with_damage_and_temperature(
-    T_range, dpa_range, T_range_contour, dpa_range_contour
-):
-    inventories = []
-    inventories_no_damage = []
-    inventories_normalised = []
-    inventories_standard_temp = []
-    inventories_standard_temp_normalised = []
-    inventories_contour = []
-    inventories_no_damage_contour = []
-    inventories_normalised_contour = []
-
-    for dpa in dpa_range:
-        phi = dpa / fpy
-        (
-            H_retention_standard_temp,
-            trap_densities_standard_temp,
-            trap_filling_ratios_standard_temp,
-        ) = analytical_model(phi=phi, T=700)
-        inventory_per_dpa = []
-        inventories_no_damage = []
-        inventories_standard_temp.append(H_retention_standard_temp)
-        for T in T_range:
-            (H_retention, trap_densities, trap_filling_ratios) = analytical_model(
-                phi=phi, T=T
-            )
-            (
-                H_retention_no_damage,
-                trap_densities_no_damage,
-                trap_filling_ratios_no_damage,
-            ) = analytical_model(phi=phi, T=T)
-            inventory_per_dpa.append(H_retention)
-            inventories_no_damage.append(H_retention_no_damage)
-        inventories.append(inventory_per_dpa)
-
-    for dpa in dpa_range_contour:
-        phi = dpa / fpy
-        inventory_contour_per_dpa = []
-        inventories_no_damage_contour = []
-        for T in T_range_contour:
-            (H_retention, trap_densities, trap_filling_ratios) = analytical_model(
-                phi=phi, T=T
-            )
-            (
-                H_retention_no_damage,
-                trap_densities_no_damage,
-                trap_filling_ratios_no_damage,
-            ) = analytical_model(phi=0, T=T)
-            inventory_contour_per_dpa.append(H_retention)
-            inventories_no_damage_contour.append(H_retention_no_damage)
-        inventories_contour.append(inventory_contour_per_dpa)
-
-    for inv in inventories:
-        normalised_values = np.array(inv) / np.array(inventories[0])
-        inventories_normalised.append(normalised_values)
-
-    for inv in inventories_standard_temp:
-        normalised_values = np.array(inv) / np.array(inventories_standard_temp[0])
-        inventories_standard_temp_normalised.append(normalised_values)
-
-    for case in inventories_contour:
-        inventory = case / np.array(inventories_no_damage_contour)
-        inventories_normalised_contour.append(inventory)
-
-    return (
-        inventories,
-        inventories_no_damage,
-        inventories_normalised,
-        inventories_standard_temp,
-        inventories_standard_temp_normalised,
-        inventories_contour,
-        inventories_normalised_contour,
-    )
-
-
-def trap_density_variation_with_damage_and_temperature(
-    T_range, dpa_range, T_range_contour, dpa_range_contour
-):
-    trap_d1_densities = []
-    trap_d2_densities = []
-    trap_d3_densities = []
-    trap_d4_densities = []
-    trap_densities_by_T = []
-    trap_densities_by_dpa = []
-    trap_d1_densities_contour = []
-    trap_d2_densities_contour = []
-    trap_d3_densities_contour = []
-    trap_d4_densities_contour = []
-
-    for T in T_range:
-        (H_retention, trap_densities, trap_filling_ratios) = analytical_model(
-            phi=10 / fpy, T=T
-        )
-        trap_densities_by_T.append(trap_densities)
-
-    for dpa in dpa_range:
-        phi = dpa / fpy
-        (H_retention, trap_densities, trap_filling_ratios) = analytical_model(
-            phi=phi, T=700
-        )
-        trap_densities_by_dpa.append(trap_densities)
-
-    for dpa in dpa_range_contour:
-        phi = dpa / fpy
-        trap_d1_densities_per_dpa = []
-        trap_d2_densities_per_dpa = []
-        trap_d3_densities_per_dpa = []
-        trap_d4_densities_per_dpa = []
-        for T in T_range_contour:
-            (H_retention, trap_densities, trap_filling_ratios) = analytical_model(
-                phi=phi, T=T
-            )
-            trap_d1_densities_per_dpa.append(trap_densities[1])
-            trap_d2_densities_per_dpa.append(trap_densities[2])
-            trap_d3_densities_per_dpa.append(trap_densities[3])
-            trap_d4_densities_per_dpa.append(trap_densities[4])
-        trap_d1_densities_contour.append(trap_d1_densities_per_dpa)
-        trap_d2_densities_contour.append(trap_d2_densities_per_dpa)
-        trap_d3_densities_contour.append(trap_d3_densities_per_dpa)
-        trap_d4_densities_contour.append(trap_d4_densities_per_dpa)
-
-    trap_d1_densities_contour = np.array(trap_d1_densities_contour)
-    trap_d2_densities_contour = np.array(trap_d2_densities_contour)
-    trap_d3_densities_contour = np.array(trap_d3_densities_contour)
-    trap_d4_densities_contour = np.array(trap_d4_densities_contour)
-
-    trap_d1_densities_contour_normalised = (
-        trap_d1_densities_contour / trap_d1_densities_contour[-1]
-    )
-    trap_d2_densities_contour_normalised = (
-        trap_d2_densities_contour / trap_d2_densities_contour[-1]
-    )
-    trap_d3_densities_contour_normalised = (
-        trap_d3_densities_contour / trap_d3_densities_contour[-1]
-    )
-    trap_d4_densities_contour_normalised = (
-        trap_d4_densities_contour / trap_d4_densities_contour[-1]
-    )
-    trap_d1_densities_contour_normalised -= 1e-16
-    trap_d2_densities_contour_normalised -= 1e-16
-    trap_d3_densities_contour_normalised -= 1e-16
-    trap_d4_densities_contour_normalised -= 1e-16
-
-    trap_d1_densities_by_dpa, trap_d2_densities_by_dpa = [], []
-    trap_d3_densities_by_dpa, trap_d4_densities_by_dpa = [], []
-    trap_d1_densities_by_T, trap_d2_densities_by_T = [], []
-    trap_d3_densities_by_T, trap_d4_densities_by_T = [], []
-    trap_3_densities, trap_4_densities = [], []
-    trap_5_densities, trap_6_densities = [], []
-
-    for density in trap_densities_by_dpa:
-        trap_d1_densities_by_dpa.append(density[1])
-        trap_d2_densities_by_dpa.append(density[2])
-        trap_d3_densities_by_dpa.append(density[3])
-        trap_d4_densities_by_dpa.append(density[4])
-
-    for density in trap_densities_by_T:
-        trap_d1_densities_by_T.append(density[1])
-        trap_d2_densities_by_T.append(density[2])
-        trap_d3_densities_by_T.append(density[3])
-        trap_d4_densities_by_T.append(density[4])
-
-    return (
-        trap_d1_densities,
-        trap_d2_densities,
-        trap_d3_densities,
-        trap_d4_densities,
-        trap_densities_by_T,
-        trap_d1_densities_by_T,
-        trap_d2_densities_by_T,
-        trap_d3_densities_by_T,
-        trap_d4_densities_by_T,
-        trap_d1_densities_by_dpa,
-        trap_d2_densities_by_dpa,
-        trap_d3_densities_by_dpa,
-        trap_d4_densities_by_dpa,
-        trap_d1_densities_contour,
-        trap_d2_densities_contour,
-        trap_d3_densities_contour,
-        trap_d4_densities_contour,
-        trap_d1_densities_contour_normalised,
-        trap_d2_densities_contour_normalised,
-        trap_d3_densities_contour_normalised,
-        trap_d4_densities_contour_normalised,
-    )
+        return dndt
