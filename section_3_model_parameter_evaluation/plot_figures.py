@@ -11,9 +11,9 @@ def plot_fig_2_annealed_trap_fitting():
     """
 
     test_temperatures = [370, 400, 500, 600, 800]
-    defect_type_1_densities = [0.230, 0.230, 0.225, 0.153, 0.107]  # at.fr
-    defect_type_2_densities = [0.290, 0.290, 0.280, 0.280, 0.189]  # at.fr
-    defect_type_3_densities = [0.05, 0.05, 0.05, 0.05, 0.06]  # at.fr
+    defect_type_1_densities = [0.230, 0.230, 0.225, 0.153, 0.107]  # at.%
+    defect_type_2_densities = [0.290, 0.290, 0.280, 0.280, 0.189]  # at.%
+    defect_type_3_densities = [0.05, 0.05, 0.05, 0.05, 0.06]  # at.%
     annealing_time = 7200
 
     # read fitting data
@@ -84,7 +84,7 @@ def plot_fig_2_annealed_trap_fitting():
 
     plt.ylim(bottom=0)
     plt.xlim(350, 850)
-    plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
+    plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
     plt.legend()
     ax = plt.gca()
     ax.spines["top"].set_visible(False)
