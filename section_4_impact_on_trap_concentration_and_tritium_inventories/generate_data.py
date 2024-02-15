@@ -1,5 +1,6 @@
 from festim_model import festim_sim
 import numpy as np
+import festim as F
 
 # common values
 k_B = F.k_B  # eV K-1
