@@ -20,25 +20,19 @@ E_D = 0.28
 
 
 def festim_sim(
-    n1=1,
-    n2=1,
-    n3=1,
-    n4=1,
-    n5=1,
-    initial_number_cells=100,
-    results_foldername="Results/",
+    n1, n2, n3, n4, n5, initial_number_cells=100, results_foldername="Results/"
 ):
     """Runs a FESTIM simulation with a custom mesh generator created with the
     automatic_vertices function.
 
     Args:
-        n1 (float): trap_density in m-3
-        n2 (float): trap_density in m-3
-        n3 (float): trap_density in m-3
-        n4 (float): trap_density in m-3
-        n4 (float): trap_density in m-3
+        n1 (float): trap density in m-3
+        n2 (float): trap density in m-3
+        n3 (float): trap density in m-3
+        n4 (float): trap density in m-3
+        n4 (float): trap density in m-3
         initial_number_of_cells (float): initial number of cells in the mesh
-        results_foldername (str) results folder location
+        results_foldername (str): results folder location
     """
     center = 0.7e-9
     width = 0.5e-9
@@ -59,59 +53,61 @@ def festim_sim(
 
     # define traps
     damage_dist = 1 / (1 + sp.exp((F.x - 2.3e-06) / 1e-07))
-    my_model.traps = F.Traps(
-        [
+    traps = [
+        F.Trap(
+            k_0=tungsten.D_0 / (1.1e-10**2 * 6 * atom_density_W),
+            E_k=tungsten.E_D,
+            p_0=1e13,
+            E_p=1.0,
+            density=2e22,
+            materials=tungsten,
+        )
+    ]
+    if sum([n1, n2, n3, n4, n5]) > 0:  # if the traps densities are not zero add traps
+        traps += [
             F.Trap(
-                k_0=4.1e-7 / (1.1e-10**2 * 6 * atom_density_W),
-                E_k=0.39,
-                p_0=1e13,
-                E_p=1.0,
-                density=2e22,
-                materials=tungsten,
-            ),
-            F.Trap(
-                k_0=4.1e-7 / (1.1e-10**2 * 6 * atom_density_W),
-                E_k=0.39,
+                k_0=tungsten.D_0 / (1.1e-10**2 * 6 * atom_density_W),
+                E_k=tungsten.E_D,
                 p_0=1e13,
                 E_p=1.15,
                 density=n1 * damage_dist,
                 materials=tungsten,
             ),
             F.Trap(
-                k_0=4.1e-7 / (1.1e-10**2 * 6 * atom_density_W),
-                E_k=0.39,
+                k_0=tungsten.D_0 / (1.1e-10**2 * 6 * atom_density_W),
+                E_k=tungsten.E_D,
                 p_0=1e13,
                 E_p=1.35,
                 density=n2 * damage_dist,
                 materials=tungsten,
             ),
             F.Trap(
-                k_0=4.1e-7 / (1.1e-10**2 * 6 * atom_density_W),
-                E_k=0.39,
+                k_0=tungsten.D_0 / (1.1e-10**2 * 6 * atom_density_W),
+                E_k=tungsten.E_D,
                 p_0=1e13,
                 E_p=1.65,
                 density=n3 * damage_dist,
                 materials=tungsten,
             ),
             F.Trap(
-                k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
-                E_k=0.39,
+                k_0=tungsten.D_0 / (1.1e-10**2 * 6 * atom_density_W),
+                E_k=tungsten.E_D,
                 p_0=1e13,
                 E_p=1.85,
                 density=n4 * damage_dist,
                 materials=tungsten,
             ),
             F.Trap(
-                k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
-                E_k=0.39,
+                k_0=tungsten.D_0 / (1.1e-10**2 * 6 * atom_density_W),
+                E_k=tungsten.E_D,
                 p_0=1e13,
                 E_p=2.05,
                 density=n5 * damage_dist,
                 materials=tungsten,
             ),
         ]
-    )
 
+    my_model.traps = traps
     # define mesh
     vertices = automatic_vertices(
         r_p=center,
@@ -170,25 +166,18 @@ def festim_sim(
     H_flux_right = F.HydrogenFlux(surface=2)
     solute = F.TotalVolume("solute", volume=1)
     retention = F.TotalVolume("retention", volume=1)
-    trap_1 = F.TotalVolume("1", volume=1)
-    trap_2 = F.TotalVolume("2", volume=1)
-    trap_3 = F.TotalVolume("3", volume=1)
-    trap_4 = F.TotalVolume("4", volume=1)
-    trap_5 = F.TotalVolume("5", volume=1)
-    trap_6 = F.TotalVolume("6", volume=1)
     my_derived_quantities.derived_quantities = [
         average_T,
         H_flux_left,
         H_flux_right,
         solute,
         retention,
-        trap_1,
-        trap_2,
-        trap_3,
-        trap_4,
-        trap_5,
-        trap_6,
+        *[
+            F.TotalVolume(str(i), volume=1)
+            for i, _ in enumerate(my_model.traps.traps, start=1)
+        ],
     ]
+    print(len(my_model.traps.traps))
 
     my_model.exports = F.Exports(
         [
@@ -227,82 +216,4 @@ def festim_sim(
 
 
 if __name__ == "__main__":
-    # # 0 dpa values
-    # festim_sim(
-    #     n1=0,
-    #     n2=0,
-    #     n3=0,
-    #     n4=0,
-    #     n5=0,
-    #     results_foldername="data/damaged_sample_tds_fittings/dpa_0/",
-    # )
-
-    # # 0.001 dpa values
-    # festim_sim(
-    #     n1=4.5e24,
-    #     n2=1e24,
-    #     n3=5e23,
-    #     n4=1e24,
-    #     n5=2e23,
-    #     results_foldername="data/damaged_sample_tds_fittings/dpa_0.001/",
-    # )
-
-    # # 0.005 dpa values
-    # festim_sim(
-    #     n1=7e24,
-    #     n2=2.5e24,
-    #     n3=1e24,
-    #     n4=1.9e24,
-    #     n5=1.6e24,
-    #     results_foldername="data/damaged_sample_tds_fittings/dpa_0.005/",
-    # )
-
-    # # 0.023 dpa values
-    # festim_sim(
-    #     n1=2.4e25,
-    #     n2=1.4e25,
-    #     n3=6e24,
-    #     n4=2.1e25,
-    #     n5=6e24,
-    #     results_foldername="data/damaged_sample_tds_fittings/dpa_0.023/",
-    # )
-
-    # # 0.1 dpa values
-    # festim_sim(
-    #     n1=5.4e25,
-    #     n2=3.8e25,
-    #     n3=2.8e25,
-    #     n4=3.6e25,
-    #     n5=1.1e25,
-    #     results_foldername="data/damaged_sample_tds_fittings/dpa_0.1/",
-    # )
-
-    # 0.23 dpa values
-    festim_sim(
-        n1=5.8e25,
-        n2=4.4e25,
-        n3=3.5e25,
-        n4=4.0e25,
-        n5=1.4e25,
-        results_foldername="data/damaged_sample_tds_fittings/dpa_0.23/",
-    )
-
-    # 0.5 dpa values
-    festim_sim(
-        n1=6.0e25,
-        n2=4.8e25,
-        n3=4.3e25,
-        n4=4.3e25,
-        n5=1.75e25,
-        results_foldername="data/damaged_sample_tds_fittings/dpa_0.5/",
-    )
-
-    # 2.5 dpa values
-    festim_sim(
-        n1=6.8e25,
-        n2=6.1e25,
-        n3=5e25,
-        n4=5e25,
-        n5=2e25,
-        results_foldername="data/damaged_sample_tds_fittings/dpa_2.5/",
-    )
+    pass

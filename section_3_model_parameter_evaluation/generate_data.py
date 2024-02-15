@@ -83,14 +83,14 @@ def generate_fig_2_annealed_trap_fitting_data():
 
 def generate_fig_4_TDS_fitting_data():
     # 0 dpa values
-    festim_sim(
-        n1=0,
-        n2=0,
-        n3=0,
-        n4=0,
-        n5=0,
-        results_foldername="data/damaged_sample_tds_fittings/dpa_0/",
-    )
+    # festim_sim(
+    #     n1=0,
+    #     n2=0,
+    #     n3=0,
+    #     n4=0,
+    #     n5=0,
+    #     results_foldername="data/damaged_sample_tds_fittings/dpa_0/",
+    # )
 
     # 0.001 dpa values
     festim_sim(
