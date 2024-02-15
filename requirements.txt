@@ -1,0 +1,4 @@
+festim==1.1.1
+matplotlib
+numpy
+scipy

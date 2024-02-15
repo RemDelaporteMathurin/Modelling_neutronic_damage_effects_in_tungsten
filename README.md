@@ -15,18 +15,14 @@ The trap-creation model parameterisation procedure can be used to investigate ne
 
 ## Reproduce data
 1. Clone this repository to your local machine.
-2. Create a Conda environment using the provided `environment.yml` file:
-
     ```bash
-    conda env create -f environment.yml
+    git clone https://github.com/J-Dark-PhD/Modelling_neutron_damage_effects_in_tungsten
     ```
-
-   This will set up a Conda environment named `festim-env` with all the required dependencies for running the FESTIM scripts and visualisation scripts.
-
-3. Activate the Conda environment:
+2. Create a conda environment to use FESTIM, instructions for this can be found in the FESTIM [documentation](https://festim.readthedocs.io/en/latest/installation.html)
+3. Download the required dependencies to run the scripts:
 
     ```bash
-    conda activate festim-env
+    pip install -r requirements.txt
     ```
 
 4. Execute the Python scripts using the activated Conda environment and ensure compatibility with FESTIM requirements.
