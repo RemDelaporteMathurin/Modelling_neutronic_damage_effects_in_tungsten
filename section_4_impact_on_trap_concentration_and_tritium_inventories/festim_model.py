@@ -1,6 +1,5 @@
 import festim as F
 import numpy as np 
-from os.path import exists
 
 # diffusion parameters
 # hydrogen holtzner mulitplied by factor sqrt(3) for T
@@ -222,82 +221,3 @@ def festim_sim(
     # vrun simulation
     my_model.initialise()
     my_model.run()
-
-
-if __name__ == "__main__":
-    
-    fpy = 3600 * 24 * 365.25
-    
-    festim_sim(
-        dpa=1e-01,
-        T=400,
-        results_folder_name="Testing/",
-        total_time=fpy,
-        cells=10000
-    )
-    
-    # dpa_values = np.geomspace(1e-03, 1e03, 5)
-    # dpa_values = np.geomspace(1e-03, 1e03, 50)
-    # dpa_values = np.geomspace(1e-05, 1e03, 10)
-    # dpa_values = dpa_values[2:4]
-
-    # dpa_values = np.geomspace(1e03, 1e-03, 50)
-    # temperature_values = np.linspace(400, 1300, 5)  
-    # temperature_values = np.linspace(400, 1300, 50)
-    # temperature_values = temperature_values[:14]
-    # temperature_values = np.linspace(600, 400, 50)  
-     
-    # fpy = 3600 * 24 * 365.25
-
-    # for T in temperature_values:
-    #     for dpa in dpa_values:
-    #         # if exists("data/case_plot/T={:.0f}/dpa={:.1e}/derived_quantities.csv".format(T, dpa)):
-    #         #     pass
-    #         # else:
-    #         n = 500
-    #         for _ in range(15):
-    #             try:
-    #                 print("running case T = {:.0f}, dpa = {:.1e}, n = {}".format(T, dpa, n))
-                    
-    #                 my_folder_name = "data/case_plot/T={:.0f}/dpa={:.1e}/".format(T, dpa)
-                    
-    #                 festim_sim(
-    #                     dpa=dpa,
-    #                     T=T,
-    #                     results_folder_name=my_folder_name,
-    #                     total_time=fpy,
-    #                     cells=n
-    #                 )
-    #                 break
-    #             except Exception as e:
-    #                 n *= 1.5
-    #                 n = int(n)
-    #                 print("increasing n to {}".format(n))
-    
-    
-    # undamaged case
-    # for T in temperature_values:
-    #     if exists("data/case_1fpy/T={:.0f}/dpa=0/derived_quantities.csv".format(T)):
-    #         pass
-    #     else:
-    #         n = 500
-    #         for _ in range(15):
-    #             try:
-    #                 print("running case T = {:.0f}, dpa = 0, n = {}".format(T, n))
-                    
-    #                 my_folder_name = "data/case_1fpy/T={:.0f}/dpa=0/".format(T)
-                    
-    #                 festim_sim(
-    #                     dpa=0,
-    #                     T=T,
-    #                     results_folder_name=my_folder_name,
-    #                     total_time=fpy,
-    #                     cells=n
-    #                 )
-    #                 break
-    #             except Exception as e:
-    #                 n *= 1.5
-    #                 n = int(n)
-    #                 print("increasing n to {}".format(n))
-
-    
