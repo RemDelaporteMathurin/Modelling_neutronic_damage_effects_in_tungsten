@@ -17,7 +17,6 @@ def plot_fig_2_annealed_trap_fitting():
     defect_type_1_densities = [0.230, 0.230, 0.225, 0.153, 0.107]  # at.%
     defect_type_2_densities = [0.290, 0.290, 0.280, 0.280, 0.189]  # at.%
     defect_type_3_densities = [0.05, 0.05, 0.05, 0.05, 0.06]  # at.%
-    annealing_time = 7200
 
     # read fitting data
     annealed_defect_type_1_densities = np.genfromtxt(
