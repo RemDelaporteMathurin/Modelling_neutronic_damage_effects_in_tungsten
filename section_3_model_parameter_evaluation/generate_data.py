@@ -4,21 +4,18 @@ from neutron_trap_creation_models import neutron_trap_creation_numerical
 from TDS_sim import festim_sim
 
 
-
 def generate_fig_2_annealed_trap_fitting_data():
     """
     orginal data from A.Zaloznik et al, available at https://doi.org/10.1088/0031-8949/t167/1/014031
     subsequently fitted by E.Hodille et al, available at https://doi.org/10.1088/1741-4326/aa5aa5
     """
 
-    test_temperatures = [370, 400, 500, 600, 800]
     defect_type_1_densities = [0.230, 0.230, 0.225, 0.153, 0.107]
     defect_type_2_densities = [0.290, 0.290, 0.280, 0.280, 0.189]
     defect_type_3_densities = [0.05, 0.05, 0.05, 0.05, 0.06]
     annealing_time = 7200
 
     # ##### standard variables ##### #
-    atom_density_W = 6.3e28
     t_annealing = np.linspace(0, annealing_time, num=1000)
     T_values = np.linspace(1, 800, num=1000)
 
@@ -78,7 +75,6 @@ def generate_fig_2_annealed_trap_fitting_data():
         )
         annealed_defect_3_densities.append(n_traps_annleaing_defect_3[-1])
 
-
     # exporting
     np.savetxt("data/annealed_defect_1_densities.txt", annealed_defect_1_densities)
     np.savetxt("data/annealed_defect_2_densities.txt", annealed_defect_2_densities)
@@ -95,7 +91,7 @@ def generate_fig_4_TDS_fitting_data():
         n5=0,
         results_foldername="data/damaged_sample_tds_fittings/dpa_0/",
     )
-    
+
     # 0.001 dpa values
     festim_sim(
         n1=4.5e24,
@@ -105,7 +101,7 @@ def generate_fig_4_TDS_fitting_data():
         n5=2e23,
         results_foldername="data/damaged_sample_tds_fittings/dpa_0.001/",
     )
-    
+
     # 0.005 dpa values
     festim_sim(
         n1=7e24,
@@ -115,7 +111,7 @@ def generate_fig_4_TDS_fitting_data():
         n5=1.6e24,
         results_foldername="data/damaged_sample_tds_fittings/dpa_0.005/",
     )
-    
+
     # 0.023 dpa values
     festim_sim(
         n1=2.4e25,
@@ -125,7 +121,7 @@ def generate_fig_4_TDS_fitting_data():
         n5=6e24,
         results_foldername="data/damaged_sample_tds_fittings/dpa_0.023/",
     )
-    
+
     # 0.1 dpa values
     festim_sim(
         n1=5.4e25,
@@ -135,7 +131,7 @@ def generate_fig_4_TDS_fitting_data():
         n5=1.1e25,
         results_foldername="data/damaged_sample_tds_fittings/dpa_0.1/",
     )
-    
+
     # 0.23 dpa values
     festim_sim(
         n1=5.8e25,
@@ -145,7 +141,7 @@ def generate_fig_4_TDS_fitting_data():
         n5=1.4e25,
         results_foldername="data/damaged_sample_tds_fittings/dpa_0.23/",
     )
-    
+
     # 0.5 dpa values
     festim_sim(
         n1=6.0e25,
@@ -155,7 +151,7 @@ def generate_fig_4_TDS_fitting_data():
         n5=1.75e25,
         results_foldername="data/damaged_sample_tds_fittings/dpa_0.5/",
     )
-    
+
     # 2.5 dpa values
     festim_sim(
         n1=6.8e25,
@@ -165,7 +161,7 @@ def generate_fig_4_TDS_fitting_data():
         n5=2e25,
         results_foldername="data/damaged_sample_tds_fittings/dpa_2.5/",
     )
-    
+
 
 def generate_fig_5_damaged_trap_fitting_data():
     """
@@ -197,7 +193,7 @@ def generate_fig_5_damaged_trap_fitting_data():
     trap_D5_n_max = 2.0e25
 
     phi = 8.9e-05
-    t_damage = int(3/phi)
+    t_damage = int(3 / phi)
     t = np.linspace(0, t_damage, 1000)
     n_0 = 0
     T_damage = 800  # K
@@ -234,7 +230,7 @@ def generate_fig_5_damaged_trap_fitting_data():
     np.savetxt("data/damage_trap_D3_fitting.txt", n_trap3_damaged)
     np.savetxt("data/damage_trap_D4_fitting.txt", n_trap4_damaged)
     np.savetxt("data/damage_trap_D5_fitting.txt", n_trap5_damaged)
-    
+
 
 if __name__ == "__main__":
     generate_fig_2_annealed_trap_fitting_data()
