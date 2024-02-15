@@ -1,9 +1,11 @@
 import numpy as np
 import csv
 import matplotlib.pyplot as plt
-from matplotlib import cm
+from matplotlib import cm, rcParams
 from matplotlib.colors import LogNorm
+import shutil
 
+rcParams['text.usetex']= True if shutil.which('latex') else False
 
 def plot_fig_2_annealed_trap_fitting():
     """
@@ -30,10 +32,6 @@ def plot_fig_2_annealed_trap_fitting():
     T_values = np.linspace(1, 900, num=1000)
 
     # ##### Plotting ##### #
-
-    plt.rc("text", usetex=True)
-    plt.rc("font", family="serif", size=12)
-
     green_ryb = (117 / 255, 184 / 255, 42 / 255)
     firebrick = (181 / 255, 24 / 255, 32 / 255)
     electric_blue = (83 / 255, 244 / 255, 255 / 255)
@@ -102,10 +100,6 @@ def plot_fig_3_trap_density_distribution():
     traps = 1 / (1 + np.exp((x_values - x_0) / dx_0))
 
     # ##### plotting ##### #
-
-    plt.rc("text", usetex=True)
-    plt.rc("font", family="serif", size=12)
-
     plt.figure()
     plt.plot(x_values, traps, color="black")
     plt.xlim(0, 1e-05)
@@ -116,7 +110,7 @@ def plot_fig_3_trap_density_distribution():
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
     plt.tight_layout()
-    
+   
 
 def plot_fig_4_TDS_data_fitted():
     """
@@ -156,9 +150,6 @@ def plot_fig_4_TDS_data_fitted():
 
 
     # ##### plotting ##### #
-
-    plt.rc("text", usetex=True)
-    plt.rc("font", family="serif", size=12)
 
     # colourbar
     plot_dpa_values = dpa_values[:-1]
@@ -238,8 +229,6 @@ def plot_fig_5_damaged_trap_fitting():
     dpa_x_values = np.linspace(0, 3, num=1000)
 
     # ##### plotting ##### #
-    plt.rc("text", usetex=True)
-    plt.rc("font", family="serif", size=12)
 
     green_ryb = (117 / 255, 184 / 255, 42 / 255)
     firebrick = (181 / 255, 24 / 255, 32 / 255)

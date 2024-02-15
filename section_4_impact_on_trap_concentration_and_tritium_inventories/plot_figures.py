@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
-from matplotlib import cm
+from matplotlib import cm, rcParams
+import shutil
 from matplotlib.colors import LogNorm
 import numpy as np
 
-plt.rc("text", usetex=True)
-plt.rc("font", family="serif", size=12)
+rcParams['text.usetex']= True if shutil.which('latex') else False
 
 
 def plot_fig_6_trap_density_variation():
@@ -86,9 +86,6 @@ def plot_fig_7_inventory_transient_and_distribution():
     dpa_values = np.geomspace(1e-05, 1e02, num=8)
 
     # ##### plotting ##### #
-    plt.rc("text", usetex=True)
-    plt.rc("font", family="serif", size=12)
-
     # define colourbar
     norm = LogNorm(vmin=min(dpa_values), vmax=max(dpa_values))
     colorbar = cm.viridis
