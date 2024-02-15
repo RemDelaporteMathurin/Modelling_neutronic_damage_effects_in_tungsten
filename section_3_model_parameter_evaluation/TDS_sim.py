@@ -1,7 +1,7 @@
 import sympy as sp
 from compute_profile_depth import automatic_vertices
 import festim as F
-import numpy as np
+import sympy as sp
 
 fluence = 1.5e25
 implantation_time = 72 * 3600
@@ -18,6 +18,7 @@ atom_density_W = 6.3222e28
 D_0 = 1.6e-07
 E_D = 0.28
 
+
 def festim_sim(
     n1=1,
     n2=1,
@@ -27,8 +28,8 @@ def festim_sim(
     initial_number_cells=100,
     results_foldername="Results/",
 ):
-    """Runs a FESTIM simulation with a custom mesh generator created with the 
-    automatic vertices function.
+    """Runs a FESTIM simulation with a custom mesh generator created with the
+    automatic_vertices function.
 
     Args:
         n1 (float): trap_density in m-3
@@ -39,7 +40,6 @@ def festim_sim(
         initial_number_of_cells (float): initial number of cells in the mesh
         results_foldername (str) results folder location
     """
-    r = 0
     center = 0.7e-9
     width = 0.5e-9
     distribution = (
@@ -127,13 +127,17 @@ def festim_sim(
 
     # define temperature
     my_model.T = F.Temperature(
-        value=exposure_temp * (F.t < implantation_time)
-        + resting_temp
-        * (F.t >= implantation_time)
-        * (F.t < implantation_time + resting_time)
-        + (
-            (300 + ramp * (F.t - (implantation_time + resting_time)))
-            * (F.t >= implantation_time + resting_time)
+        value=sp.Piecewise(
+            (exposure_temp, F.t < implantation_time),
+            (
+                resting_temp,
+                (F.t >= implantation_time) & (F.t < implantation_time + resting_time),
+            ),
+            (
+                300 + ramp * (F.t - (implantation_time + resting_time)),
+                F.t >= implantation_time + resting_time,
+            ),
+            (0, True),
         )
     )
 
@@ -145,7 +149,12 @@ def festim_sim(
     # define sources
     my_model.sources = [
         F.Source(
-            volume=1, field=0, value=flux * distribution * (F.t < implantation_time)
+            volume=1,
+            field=0,
+            value=sp.Piecewise(
+                (flux * distribution, F.t < implantation_time),
+                (0, True),
+            ),
         )
     ]
 
@@ -180,17 +189,19 @@ def festim_sim(
         trap_5,
         trap_6,
     ]
-    
-    my_model.exports = F.Exports([
-        my_derived_quantities, 
-        F.XDMFExport(
-            "retention",
-            label="retention",
-            folder=folder_results,
-            checkpoint=False,
-            mode=1,
-        ),
-        ])
+
+    my_model.exports = F.Exports(
+        [
+            my_derived_quantities,
+            F.XDMFExport(
+                "retention",
+                label="retention",
+                folder=folder_results,
+                checkpoint=False,
+                mode=1,
+            ),
+        ]
+    )
 
     # define settings
     my_model.dt = F.Stepsize(
@@ -225,7 +236,7 @@ if __name__ == "__main__":
     #     n5=0,
     #     results_foldername="data/damaged_sample_tds_fittings/dpa_0/",
     # )
-    
+
     # # 0.001 dpa values
     # festim_sim(
     #     n1=4.5e24,
@@ -235,7 +246,7 @@ if __name__ == "__main__":
     #     n5=2e23,
     #     results_foldername="data/damaged_sample_tds_fittings/dpa_0.001/",
     # )
-    
+
     # # 0.005 dpa values
     # festim_sim(
     #     n1=7e24,
@@ -245,7 +256,7 @@ if __name__ == "__main__":
     #     n5=1.6e24,
     #     results_foldername="data/damaged_sample_tds_fittings/dpa_0.005/",
     # )
-    
+
     # # 0.023 dpa values
     # festim_sim(
     #     n1=2.4e25,
@@ -255,7 +266,7 @@ if __name__ == "__main__":
     #     n5=6e24,
     #     results_foldername="data/damaged_sample_tds_fittings/dpa_0.023/",
     # )
-    
+
     # # 0.1 dpa values
     # festim_sim(
     #     n1=5.4e25,
@@ -265,7 +276,7 @@ if __name__ == "__main__":
     #     n5=1.1e25,
     #     results_foldername="data/damaged_sample_tds_fittings/dpa_0.1/",
     # )
-    
+
     # 0.23 dpa values
     festim_sim(
         n1=5.8e25,
@@ -275,7 +286,7 @@ if __name__ == "__main__":
         n5=1.4e25,
         results_foldername="data/damaged_sample_tds_fittings/dpa_0.23/",
     )
-    
+
     # 0.5 dpa values
     festim_sim(
         n1=6.0e25,
@@ -285,7 +296,7 @@ if __name__ == "__main__":
         n5=1.75e25,
         results_foldername="data/damaged_sample_tds_fittings/dpa_0.5/",
     )
-    
+
     # 2.5 dpa values
     festim_sim(
         n1=6.8e25,
