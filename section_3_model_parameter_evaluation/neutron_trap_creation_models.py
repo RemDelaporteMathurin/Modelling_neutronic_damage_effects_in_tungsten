@@ -40,7 +40,6 @@ def annealing_sim(A_0, E_A, n_0, T, t):
     Returns:
         (list): A list of trap densities at various annealing tempertures
     """
-    k_B = 8.617333e-05
     A = A_0 * np.exp((-E_A) / (k_B * T))
     annealed_trap_densities = n_0 * np.exp(-A * t)
 
