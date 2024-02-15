@@ -3,6 +3,9 @@ import csv
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.colors import LogNorm
+import shutil
+
+plt.rcParams["text.usetex"] = True if shutil.which("latex") else False
 
 
 def plot_fig_2_annealed_trap_fitting():
@@ -31,7 +34,6 @@ def plot_fig_2_annealed_trap_fitting():
 
     # ##### Plotting ##### #
 
-    plt.rc("text", usetex=True)
     plt.rc("font", family="serif", size=12)
 
     green_ryb = (117 / 255, 184 / 255, 42 / 255)
@@ -103,7 +105,6 @@ def plot_fig_3_trap_density_distribution():
 
     # ##### plotting ##### #
 
-    plt.rc("text", usetex=True)
     plt.rc("font", family="serif", size=12)
 
     plt.figure()
@@ -116,7 +117,7 @@ def plot_fig_3_trap_density_distribution():
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
     plt.tight_layout()
-    
+
 
 def plot_fig_4_TDS_data_fitted():
     """
@@ -154,10 +155,7 @@ def plot_fig_4_TDS_data_fitted():
         flux = -np.asarray(flux_1) - np.asarray(flux_2)
         fitting_data.append([T_sim, flux])
 
-
     # ##### plotting ##### #
-
-    plt.rc("text", usetex=True)
     plt.rc("font", family="serif", size=12)
 
     # colourbar
@@ -213,7 +211,7 @@ def plot_fig_4_TDS_data_fitted():
     ax.spines["right"].set_visible(False)
     plt.tight_layout()
     plt.subplots_adjust(wspace=0.112, hspace=0.071)
-    plt.colorbar(sm, label=r"Damage (dpa)")
+    plt.colorbar(sm, ax=ax, label=r"Damage (dpa)")
 
 
 def plot_fig_5_damaged_trap_fitting():
@@ -238,7 +236,6 @@ def plot_fig_5_damaged_trap_fitting():
     dpa_x_values = np.linspace(0, 3, num=1000)
 
     # ##### plotting ##### #
-    plt.rc("text", usetex=True)
     plt.rc("font", family="serif", size=12)
 
     green_ryb = (117 / 255, 184 / 255, 42 / 255)
@@ -316,7 +313,7 @@ def plot_fig_5_damaged_trap_fitting():
 
     for ax in [ax1, ax2, ax3, ax4, ax5]:
         plt.sca(ax)
-        ax.get_shared_x_axes().join(ax, ax5)
+        ax.get_shared_x_axes().joined(ax, ax5)
         plt.ylim(0, 7e25)
         plt.xlim(left=0)
         ax.spines["top"].set_visible(False)
@@ -329,12 +326,12 @@ def plot_fig_5_damaged_trap_fitting():
     ax4.set_xticklabels([])
 
     plt.tight_layout()
-    
+
 
 if __name__ == "__main__":
     plot_fig_2_annealed_trap_fitting()
     plot_fig_3_trap_density_distribution()
     plot_fig_4_TDS_data_fitted()
     plot_fig_5_damaged_trap_fitting()
-    
+
     plt.show()
